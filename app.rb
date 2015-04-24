@@ -1,4 +1,6 @@
 require 'sinatra'
+require 'sinatra/activerecord'
+require 'sqlite3'
 
 get '/' do
 end
