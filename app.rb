@@ -6,6 +6,9 @@ require './models/Option.rb'
 require 'json'
 
 get '/' do
+  content_type :json
+  #if no session active:
+  {"message" => "Hello World!"}.to_json
 end
 
 get '/user' do
@@ -32,7 +35,9 @@ delete '/user' do
 end
 
 post '/auth' do
+  #generates and sets session token
 end
 
 delete '/auth' do
+  #destroys session token
 end
