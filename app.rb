@@ -4,6 +4,7 @@ require 'sqlite3'
 require './models/User.rb'
 require './models/Option.rb'
 require 'json'
+require 'redis'
 
 get '/' do
   content_type :json
