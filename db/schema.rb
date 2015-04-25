@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150424213253) do
+ActiveRecord::Schema.define(version: 20150424233826) do
 
   create_table "options", force: :cascade do |t|
     t.string   "json_object"
@@ -24,9 +24,10 @@ ActiveRecord::Schema.define(version: 20150424213253) do
 
   create_table "users", force: :cascade do |t|
     t.string   "username"
-    t.string   "password"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "password_hash"
+    t.string   "password_salt"
   end
 
 end

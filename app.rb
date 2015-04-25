@@ -5,6 +5,7 @@ require './models/User.rb'
 require './models/Option.rb'
 require 'json'
 require 'redis'
+require 'bcrypt'
 
 get '/' do
   content_type :json
@@ -37,6 +38,13 @@ end
 
 post '/auth' do
   #generates and sets session token
+  params_json = JSON.parse(request.body.read)
+  username = params_json["username"]
+  password = params_json["password"]
+  user = User.authenticate(username, password)
+  if user
+    #set cookie and create session
+  end
 end
 
 delete '/auth' do
