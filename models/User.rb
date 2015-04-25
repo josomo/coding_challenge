@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   attr_accessor :password
-  has_many :options
+  
+  has_many :options, :dependent => :destroy
 
   accepts_nested_attributes_for :options
 

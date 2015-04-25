@@ -10,14 +10,20 @@ require 'securerandom'
 
 get '/' do
   content_type :json
-  hello_hash = {"message" => "Hello World!"}
+  greeting_hash = {"message" => "Hello World!"}
   redis = Redis.new
   user_id = redis.get(request.cookies["session_token"])
-  if user_id && User.find(user_id).options.count >= 1
-    user_json_hash = eval(User.find(user_id).options.first.json_object)
-    hello_hash.merge(user_json_hash).to_json
+  if user_id 
+    username_hash = Hash.new
+    username_hash["username"] = User.find(user_id).username
+    if User.find(user_id).options.count > 0
+      stored_options = eval(User.find(user_id).options.first.json_object)
+      greeting_hash.merge(stored_options).merge(username_hash).to_json
+    elsif User.find(user_id).options.count == 0
+      greeting_hash.merge(username_hash).to_json
+    end
   else
-    hello_hash.to_json
+    greeting_hash.to_json
   end
 end
 
@@ -38,7 +44,7 @@ post '/user' do
   User.create(username: username, password: password, options_attributes: [ { json_object: options_attributes }])
 end
 
-put '/user' do
+put '/user' do                                            # allows altering and adding information only (no delete)
   redis = Redis.new
   user_id = redis.get(request.cookies["session_token"])
   if user_id
@@ -51,10 +57,11 @@ end
 
 delete '/user' do
   redis = Redis.new
-  user_id = redis.get(request.cookies["session_token"])
+  session_token = request.cookies["session_token"]
+  user_id = redis.get(session_token)
   if user_id
     User.find(user_id).destroy
-    redis.del(session_token)    #delete session too
+    redis.del(session_token)                              # invalidates session token too
   end
 end
 
